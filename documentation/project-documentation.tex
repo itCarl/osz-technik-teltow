@@ -1,0 +1,141 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[a4paper, left=2.5cm, right=2cm, top=2cm, bottom=3cm, heightrounded, includefoot]{geometry}
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		PACKAGES
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{subfiles}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{lipsum}			% Adds Lorem Ipsum placeholder
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		CUSTOM PACKAGES
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\usepackage[ihkPotsdam, timeNotesPage, tocSettings, headerAndFooter]{../packages/teltowPack}
+
+% \setThemeColor[003366]
+\isExamInSummer[true]
+\setAuthor[Mustermann, Max]
+\setSpecialization[Fachinformatiker für Anwendungsentwicklung]
+\setLoginDetails[ID-24z5n2fxasdf]
+\setProjectTitle[Implementierung einer Desktopanwendung zur Verarbeitung und Verwaltung von Übertragungswerten]
+\setCompanyName[Bug Guardians GmbH \& Co. KG]
+\setSupervisorName[Hanno Nym]
+\setSupervisorEmail[nym.hanno@bug.guardians.de]
+\setSupervisorTelefon[03328 35070]
+\setCompanyLogo[../assets/img/logo-placeholder.png]
+
+% \setHeaderLogoPosition[2.8]
+% \setHeaderLogoSize[2.75cm]
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		BEGIN DOCUMENT
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\begin{document}
+\makeIHKTitlePage%
+
+% \subfile{../pages/test/test.tex} compile all .tex subpages with PowerShell Script: /helper/compile-all.ps1
+% OR
+\makeTimeNotesPage{
+    \entry{01.02.2069}{Projekt Start -- Beginn Plannungsphase -- Recherchen}{2}
+    \entry{01.02.2069}{IST-Analyse durchführen (Fachgespräche, etc.)}{3}
+    \entry{01.02.2069}{Wirtschaftlichkeitsanalyse und Nutzwertanalyse durchführen}{3}
+    \entry{02.02.2069}{Beginn Plannungsphase -- Zielplattform festlegen}{1}
+    \entry{02.02.2069}{Benutzeroberfläche Entwerfen}{2}
+    \entry{03.02.2069}{Datenbank Diagramm erstellen}{2}
+    \entry{03.02.2069}{Plannung der Geschäfftslogik}{2}
+    \entry{04.02.2069}{Beginn Implementierungsphase -- Anlegen der Datenbank}{1 $\frac{1}{2}$}
+    \entry{05.02.2069}{Implementierung der Geschäfftslogik}{$1,5$}
+    \entry{05.02.2069}{... usw.}{2}
+    \entry{05.02.2069}{... usw.}{3}
+    \entry{06.02.2069}{... usw.}{4}
+    \entry{07.02.2069}{... usw.}{6}
+    \entry{07.02.2069}{... usw.}{7}
+    \entry{09.02.2069}{... usw.}{8}
+    \entry{10.02.2069}{... usw.}{7}
+    \entry{11.02.2069}{... usw.}{4}
+    \entry{12.02.2069}{... usw.}{3}
+    \entry{13.02.2069}{... usw.}{2}
+    \entry{14.02.2069}{Erstellung Projektdokumentation}{8}
+    \entry{14.02.2069}{Erstellung Kundendokumentation}{0,5}
+    \entry{10.02.2069}{... usw.}{7}
+    \entry{10.02.2069}{... usw.}{6}
+    \entry{11.02.2069}{... usw.}{5}
+    \entry{11.02.2069}{... usw.}{4}
+    \entry{12.02.2069}{... usw.}{3}
+    \entry{13.02.2069}{... usw.}{2}
+}
+\tableofcontents
+\newpage
+\listoffigures
+\addcontentsline{toc}{section}{Abbildungsverzeichnis} % add page to toc
+\clearpage
+% \listoftables
+% \addcontentsline{toc}{section}{Tabellenverzeichnis} % add page to toc
+% \clearpage
+
+\section{Einleitung}
+    \subsection{Projektbeschreibung}
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=.5\textwidth]{example-image}
+        \caption[Beispiel Bild]{Beispiel Bild\footnotemark.}
+    \end{figure}
+    \footnotetext{Beispiel Bild. verfügbar unter \url{www.nowhere.de}, aufgerufen am: garnicht.2024 um 00:00Uhr}
+    \lipsum\
+    \subsection{Projektziel}
+    \lipsum[1-3]
+    \begin{wrapfigure}{l}{.3\textwidth}
+        \centering
+        \includegraphics[width=.3\textwidth]{example-image-a}
+        \caption[Klickibunti Mockup]{Klickibunti Mockup\footnotemark.}
+    \end{wrapfigure}
+    \lipsum[3-6]
+    \footnotetext{Klickibunti mockups. verfügbar unter \url{www.nowhere.de}, aufgerufen am: 100 v. Chr. um 07:00Uhr}
+    \subsection{Projektumfeld}
+    \lipsum\
+    \subsection{Projektschnittstellen}
+    \lipsum\
+\section{Projektplannung}
+    \subsection{Projektphasen}
+    \lipsum\
+    \subsection{Ressourcenplannung}
+    \lipsum\
+\section{Anlysephase}
+    \subsection{Anwendungsfälle}
+    \lipsum\
+\section{Entwurfsphase}
+    \subsection{Zielplattform}
+    \lipsum\
+    \subsection{Architekturdesign}
+    \lipsum\
+    \subsection{Entwurf der Benutzeroberfläche}
+    \lipsum\
+    \subsection{Datenmodell}
+    \lipsum\
+    \subsection{Geschäftslogik}
+    \lipsum\
+\section{Implementierungsphase}
+\newpage
+\section{Dokumentation}
+\newpage
+\section{Fazit}
+
+\newpage
+\begin{alphasection}
+\section{Anhang}
+\end{alphasection}
+
+%
+%       Stats
+%
+% \newpage
+% {\Large Statistics \par}
+% \vspace{.5cm}
+% \verb|Total Reports:|\arabic{reportID}
+
+\end{document}

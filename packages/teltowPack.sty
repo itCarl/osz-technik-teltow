@@ -1,0 +1,396 @@
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+%%
+%% Created by:  FAP13
+%% Created at:  2024-03-19
+%% File:        teltowPack.sty
+%% Description: Tool collection for creating IHK (Potsdam) conform LaTeX documents
+%%
+%% History:     2024-03-19     mewesm      Created
+%%              2024-03-21     mewesm      Refactoring
+%%
+%%
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{teltowPack}[2024/03/19 IHK Project Documentation LaTeX Package]
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		THIRD-PARTY PACKAGES
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\usepackage{geometry} % should already be includes in the base file but... just-in-case (see readme)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[babel, german=quotes]{csquotes}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{tabularray}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{array, multicol, multirow}
+\usepackage{calc}
+\usepackage{tikz}
+
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		COMMON SETTINGS
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\renewcommand*\familydefault{\sfdefault}
+% \renewcommand{\headrulewidth}{0.0pt} % remove header horizontal line
+\setlength{\parindent}{0pt} % auto indent 0 pixel
+
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		GLOBAL DEFINITIONS
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\newcommand{\setThemeColor}[1][003366]{%
+    % defaults to the dark blue of the IHK logo
+    % dark blue  => #003366 (default)
+    % light blue => #ccd7e6
+    \definecolor{primaryThemeColor}{HTML}{#1}
+    \extractcolorspecs{primaryThemeColor}{\modelspec}{\grayscale}
+    % calculate luminance
+    \pgfmathparse{(
+        array({\grayscale},0)*0.2126+
+        array({\grayscale},1)*0.7152+
+        array({\grayscale},2)*0.0722
+    ) >=0.5 ? int(1) : int(0) }
+
+    % set text color depending on background color contrast
+    \ifnum\pgfmathresult>0
+        \colorlet{primaryThemeTextColor}{black}
+    \else
+        \colorlet{primaryThemeTextColor}{white}
+    \fi
+}
+
+%%% call commands to prevent error when package user doesn't set params in base file
+\setThemeColor
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		TITLE PAGE (IHK POTSDAM)
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\DeclareOption{ihkPotsdam}{
+    %%% setter commands
+    \newcommand{\isExamInSummer}[1][true]{
+        \def\isSummer{#1}
+    }
+
+    \newcommand{\setAuthor}[1][Name, Vorname]{
+        \def\cName{#1}
+    }
+
+    \newcommand{\setSpecialization}[1][Fachinformatiker für XXX]{
+        \def\cSpecialization{#1}
+    }
+
+    \newcommand{\setLoginDetails}[1][nicht angegeben]{
+        \def\cLoginDetails{#1}
+    }
+
+    \newcommand{\setProjectTitle}[1][Projektname nicht angegeben]{
+        \def\cProjectName{#1}
+    }
+
+    \newcommand{\setCompanyName}[1][Green Byte GmbH \& Co. KG]{
+        \def\cCompanyName{#1}
+    }
+
+    \newcommand{\setSupervisorName}[1][Mustermann, Max]{
+        \def\cSupervisorName{#1}
+    }
+
+    \newcommand{\setSupervisorEmail}[1][mustermann.max@example.de]{
+        \def\cSupervisorEmail{#1}
+    }
+
+    \newcommand{\setSupervisorTelefon}[1][+49 1234 567890]{
+        \def\cSupervisorTelefon{#1}
+    }
+
+    \newcommand{\setCompanyLogo}[1][example-image]{
+        \def\cCompanyLogo{#1}
+    }
+
+    \def\ihkLogoPath{../assets/img/ihk-potsdam-logo.png}
+
+    %%% IHK Potsdam conform title page
+    \newcommand{\makeIHKTitlePage}{
+        \begin{titlepage}
+            \newgeometry{left=2cm, right=1.75cm, top=1.25cm, bottom=2cm, heightrounded}
+            \def\elSpacing{10.5em}
+            \thispagestyle{empty}
+            \noindent
+            \singlespacing
+            %%% Exam phase Sommerprüfung or Winterprüfung
+            \fbox{
+                \begin{minipage}[t][12em]{.4\textwidth}
+                    \vspace{.5em}
+                    \parbox[t]{\linewidth}{%
+                        \def\stringTrue{true}
+                        \vspace{.5em}
+                        \ifx\isSummer\stringTrue
+                            Sommerprüfung \the\year
+                        \else
+                            Winterprüfung \the\year
+                        \fi
+                    }
+
+                    \vspace{2.75em}
+                    \begin{minipage}[t]{\linewidth}
+                        \centering
+                        \includegraphics[width=3.5cm]{\ihkLogoPath}
+                    \end{minipage}
+                \end{minipage}%
+            }
+            \hfill
+            %%% Author information
+            \fbox{
+                \parbox[t][12em]{.5\textwidth}{
+                    \vspace{.5em}
+                    Name, Vorname: \par
+                    \hspace*{1em}\cName \\[1em]
+                    Ausbildungsberuf/ Fachrichtung: \par
+                    \hspace*{1em}\cSpecialization \\[1em]\onehalfspacing
+                    Login \footnotesize{\textit{(Login des Online Portals)}} :\\[-.35em]\normalsize
+                    \hspace*{1em}\cLoginDetails
+                }
+            }
+
+            %%% Projectname
+            \vspace{\elSpacing}
+            \fbox{
+                \parbox[t][25pt][c]{.97\linewidth}{ % prevents Overfull \hbox warnings
+                    \centering \cProjectName
+                }
+            }
+
+            %%% Company information
+            \vspace{\elSpacing}
+            \fbox{
+                \doublespacing
+                % \def\placeholderImage{example-company}
+                % \ifx\cCompanyLogo\placeholderImage
+                %     \parbox[t][9em]{.96\linewidth}{ % prevents Overfull \hbox warnings
+                %         \vspace{5pt}
+                %         Ausbildungsbetrieb: nicht angegeben \\[1em]
+                %         Projektbetreuer: nicht angegeben \par
+                %         E-mail: nicht angegeben \par
+                %         Tel.: nicht angegeben
+                %     }
+                % \else
+                    \parbox[t][9em]{.65\linewidth}{
+                        \vspace{5pt}
+                        Ausbildungsbetrieb: \cCompanyName \\[1em]
+                        Projektbetreuer: \cSupervisorName \par
+                        E-mail: \cSupervisorEmail \par
+                        Tel.: \cSupervisorTelefon
+                    }
+                    \hfill
+                    \begin{minipage}[t][9em][c]{.3\textwidth}
+                        \centering
+                        \includegraphics[width=4cm]{\cCompanyLogo}
+                    \end{minipage}
+                % \fi
+            }
+
+            %%% Declaration of independence
+            \vfill
+            \underline{Selbstständigkeitserklärung:} \\[1em] %Eidesstattliche Erklärung:
+            \onehalfspacing
+            Hiermit erkläre ich, \cName, die hier vorliegende Arbeit (Dokumentation) selbstständig
+            und nur unter Zuhilfename der aufgeführten Quellen angefertigt zu haben. Der
+            aufgeführte zeitliche Rahmen wurde eingehalten.
+
+            %%% Signature
+            \hspace{.5cm}
+            \parbox[b][2.5cm][b]{\widthof{\footnotesize xxDatum, Unterschrift des Auszubildendenxx}}{
+                \footnotesize
+                \centering
+                \rule[-3pt]{\linewidth}{0.5pt}\\[1ex]
+                {Ort, Datum}
+            }
+            \hspace{2.5cm}
+            \parbox[b][2.5cm][b]{\widthof{\footnotesize xxDatum, Unterschrift des Ausbildendenxx}}{
+                \footnotesize
+                \centering
+                \rule[-3pt]{\linewidth}{0.5pt}\\[1ex]
+                {Unterschrift des Auszubildenden}
+            }
+        \end{titlepage}
+        \clearpage
+        \restoregeometry
+        \setcounter{page}{2}
+    }
+
+    %%% call commands to prevent error when package user doesn't set params in base file
+    \isExamInSummer
+    \setAuthor
+    \setSpecialization
+    \setLoginDetails
+    \setProjectTitle
+    \setCompanyName
+    \setSupervisorName
+    \setSupervisorEmail
+    \setSupervisorTelefon
+    \setCompanyLogo
+}
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		TIME NOTES PAGE
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\DeclareOption{timeNotesPage}{
+    \newcommand{\entry}[3]{
+        #1 & \raggedright #2 & #3 \\
+        \hline
+    }
+
+    \newcommand{\makeTimeNotesPage}[1]{
+        \pagestyle{empty}
+        \newgeometry{left=2.5cm, right=2cm, top=1.5cm, bottom=2cm, heightrounded, includefoot}
+        \renewcommand{\arraystretch}{1.25}
+        \setlength{\arrayrulewidth}{0.35mm}
+
+        \NewTblrTheme{timeNotes}{
+            \DefTblrTemplate{conthead-text}{normal}{(Fortsetzung)}
+            \SetTblrTemplate{conthead-text}{normal}
+            \DefTblrTemplate{contfoot-text}{normal}{Fortsetzung auf der nächsten Seite}
+            \SetTblrTemplate{contfoot-text}{normal}
+            % uncomment to remove table labels
+            % \DefTblrTemplate{middlehead,lasthead}{default}{}
+            % \DefTblrTemplate{firstfoot,middlefoot}{default}{}
+            % \DefTblrTemplate{caption}{default}{}
+            % \DefTblrTemplate{conthead}{default}{}
+            % \DefTblrTemplate{capcont}{default}{}
+        }
+
+        \Large \textbf{Zeitmitschrift der Projektarbeit} \\
+        \small{Dieses Formular ist mit der Projektdokumentation einzureichen!}
+
+        \vspace{2em}
+        \normalsize
+        \onehalfspacing
+        \underline{Prüfungsteilnehmer/-in} \\[1em]
+        Name, Vorname: \\
+        \hspace*{1em}\cName \\[.7em]
+        Login \footnotesize{\textit{(Login des Online Portals)}} :\\[-.35em]\normalsize
+        \hspace*{1em}\cLoginDetails
+
+        \normalsize
+        \begin{longtblr}[
+            theme = timeNotes,
+            caption = Zeitmitschrift,
+            entry = none, % do not put an entry in List of Tables
+            label = none, % skip table counter
+            expand = {\entry}
+        ]{
+            colspec = {|l|X|c|},
+            width = \linewidth,
+            rowhead = 1,
+            row{1} = {bg=primaryThemeColor, fg=primaryThemeTextColor },
+        }
+            \hline
+            Datum & Tätigkeit & Zeit in Stunden \\
+            \hline
+            #1
+        \end{longtblr}
+        \clearpage
+        \restoregeometry
+        \pagestyle{fancy}
+        \setcounter{page}{2}
+    }
+}
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		TABLE OF CONTENTS SETTINGS
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\DeclareOption{tocSettings}{
+    \hypersetup{
+        colorlinks=true,
+        hidelinks=true,
+        linktoc=all
+    }
+}
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		'FANCY' HEADER AND FOOTER SETTINGS
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\DeclareOption{headerAndFooter}{
+    \newcommand{\setHeaderLogoPosition}[1][1.75]{
+        \def\cHeaderLogoPosition{#1}
+    }
+
+    \newcommand{\setHeaderLogoSize}[1][2cm]{
+        \def\cHeaderLogoSize{\dimexpr#1}
+    }
+
+    \setlength{\headheight}{\baselineskip * 4}
+    \fancyhead{}
+    % \fancyhead[L]{\nouppercase{\small{\leftmark}}}
+    \fancyhead[L]{
+        \begin{tabular}{@{}l@{}}
+            \parbox{.8\linewidth}{\raggedright\textrm{\cProjectName}} \\[.5em]
+            \textrm{\nouppercase{\small\leftmark}}
+        \end{tabular}
+    }
+    \fancyhead[R]{
+        \def\defaultLogoPosition{1.75}
+        \ifx\cHeaderLogoPosition\defaultLogoPosition
+            \includegraphics[width=\cHeaderLogoSize]{\cCompanyLogo}
+        \else
+            % pixel perfect align the logo
+            \raisebox{\dimexpr-\height+\cHeaderLogoPosition\ht\strutbox}{
+                \includegraphics[width=\cHeaderLogoSize]{\cCompanyLogo}
+            }
+        \fi
+    }
+    \fancyfoot{}
+    \fancyfoot[R]{\thepage}
+    \pagestyle{fancy}
+
+    \setHeaderLogoPosition
+    \setHeaderLogoSize
+}
+
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+% |		HELPER COMMANDS AND DEFINITIONS
+% = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+\newcounter{alphasect}
+\def\alphainsection{0}
+
+\let\oldsection=\section
+\def\section{
+  \ifnum\alphainsection=1
+    \addtocounter{alphasect}{1}
+  \fi
+\oldsection}
+
+\renewcommand\thesection{
+  \ifnum\alphainsection=1
+    \Alph{alphasect}
+  \else
+    \arabic{section}
+  \fi
+}
+
+\newenvironment{alphasection}{
+  \ifnum\alphainsection=1
+    \errhelp={Let other blocks end at the beginning of the next block.}
+    \errmessage{Nested Alpha section not allowed}
+  \fi
+  \setcounter{alphasect}{0}
+  \def\alphainsection{1}
+}{
+  \setcounter{alphasect}{0}
+  \def\alphainsection{0}
+}
+
+% handle unkown package options
+\DeclareOption*{
+	\PackageWarning{teltowPack}{Unknown Option: `\CurrentOption`}
+}
+
+\ProcessOptions\relax
+
+\endinput
