@@ -2,20 +2,38 @@
 
 A LaTeX package for creating IHK(Industrie- und Handelskammer) conform project documentation. created by students for students.
 
-_created: 19. Mar 2024_
+created: _19. Mar 2024_
 
-_last updated: 20. Mar 2024_
+last updated: _24. Mar 2024_
 
 ## Installation
 
-Download the package via IT-Server (IP: 10.10.210)
+Download the package via IT-Server or GitHub
+
+### IT-Server (IP: 10.10.210.10)
 
 1. Download the package
+
     ```bat
-    click on the file you want to download it should download automaticly
+    click on the file you want to download it should download automaticlly
     ```
 
-2. Put the package in your project folder so that  you can find it easily. as Example:
+2. Put the package in your project folder so that  you can find it easily. as example:
+
+    ```bat
+    copy teltowPack.sty [projectRoot]/packages/teltowPack.sty
+    ```
+
+### GitHub
+
+1. Clone the repository
+
+    ```shell
+    git clone https://github.com/itCarl/osz-technik-teltow.git
+    ```
+
+2. Put the package in your project folder so that  you can find it easily. as example:
+
     ```bat
     copy teltowPack.sty [projectRoot]/packages/teltowPack.sty
     ```
@@ -26,7 +44,7 @@ Just include the package on top of your main LaTeX document as you would with an
 
 ```latex
 ... other Packages
-\usepackage{../packages/teltowPack}
+\usepackage[ihkPotsdam, timeNotesPage, tocSettings, headerAndFooter]{../packages/teltowPack}
 ...
 ...
 \begin{document}
@@ -40,15 +58,34 @@ Fill the title page with your data and show it as the first page.
 ...
 
 % parameters you can change
-\setAuthor[lastname, firstname] %\setAuthor
-\setSpecialization[...]
-\setCandidateNumber[...]
-\setStudentID[...]
-\setProjectTitle[...]
+\setThemeColor[... HTML Hexcode]
+\isExamInSummer[... boolean]
+\setAuthor[...string, ...string]
+\setLoginDetails[...string]
+\setSpecialization[...string]
+\setCompanyName[...string]
+\setSupervisorName[...string]
+\setSupervisorEmail[...string]
+\setSupervisorTelefon[...string]
+\setProjectTitle[...string]
 \setCompanyLogo[...path]
+% per page header
+\setHeaderLogoPosition[2.8]
+\setHeaderLogoSize[2.75cm]
+
 
 \begin{document}
-\makeIHKTitlePage\ <--- included page, 
+
+% include title page
+\makeIHKTitlePage\
+
+% include time note page
+\makeTimeNotesPage{
+    \entry{...datum}{...text}{...number}
+    \entry{01.02.2069}{Implementirung der Geschäftislogik)}{3}
+    ...
+    ..
+}
 ...
 ... your documentation
 ... 
@@ -59,11 +96,39 @@ enjoy &nbsp; \\_(＾－＾)_/
 
 ## Example usage
 
+under `/example` you can see a full documentation example
+
+### Themeing
+
+```latex
+% IHK logo colors. We recommend to set this to your companys main color
+% dark blue  => #003366 (default)
+% light blue => #ccd7e6
+\setThemeColor[HTML Hexcode]
+\setThemeColor[003366] % dark blue (default)
+\setThemeColor[ccd7e6] % light blue
+```
+
+### Summer or Winter exam
+
+```latex
+% 
+\isExamInSummer[true]  % (default) => Sommerprüfung 20xx
+\isExamInSummer[false] % => Winterprüfung 20xx
+```
+
 ### Author
 
 ```latex
 \setAuthor[lastname, firstname]
 \setAuthor[Mewes, Maximilian]
+```
+
+### Login (Login to the online portal)
+
+```latex
+\setLoginDetails[your online id]
+\setLoginDetails[ID-24z5n2fxasdf]
 ```
 
 ### Specialization
@@ -73,28 +138,42 @@ enjoy &nbsp; \\_(＾－＾)_/
 \setSpecialization[Fachinformatiker für Anwendungsentwicklung]
 ```
 
-### (Online) Candidate ID
+### Company name
 
 ```latex
-\setCandidateNumber[some number idk]
-\setCandidateNumber[69420]
+\setCompanyName[company name]
+\setCompanyName[Bug Guardians GmbH \& Co. KG]
 ```
 
-### (Online) Student ID
+### Supervisor name
 
 ```latex
-\setStudentID[your online ID]
-\setStudentID[8 589 869 056]
+\setSupervisorName[supervisor name]
+\setSupervisorName[Hanno Nym]
+```
+
+### Supervisor Email
+
+```latex
+\setSupervisorEmail[supervisor email]
+\setSupervisorEmail[nym.hanno@bug.guardians.de]
+```
+
+### Supervisor Telefon
+
+```latex
+\setSupervisorTelefon[supervisor telefon]
+\setSupervisorTelefon[03328 35070]
 ```
 
 ### Projectname
 
 ```latex
 \setProjectTitle[The same as on your project application]
-\setProjectTitle[Integration von MATLAB-Bibliotheken zur Lösung komplexer mathematischer Probleme in einer C#-Anwendung]
+\setProjectTitle[Implementierung einer Desktopanwendung zur Verarbeitung und Verwaltung von Übertragungswerten]
 ```
 
-### (optional) Company logo
+### Company logo
 
 ```latex
 \setCompanyLogo[path to your company logo]
@@ -112,6 +191,13 @@ project-documentation
     └ teltoPack.sty <<<<<
 
 \setCompanyLogo[../assets/company-logo.png]
+```
+
+### Header Logo
+
+```latex
+\setHeaderLogoPosition[2.8] % (optional) used to set offset for pixel perfect alignment
+\setHeaderLogoSize[2.75cm]
 ```
 
 ## Contributing
