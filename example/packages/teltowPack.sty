@@ -7,6 +7,7 @@
 %%
 %% History:     2024-03-19     mewesm      Created
 %%              2024-03-21     mewesm      Refactoring
+%%              2024-04-25     mewesm      Removed AlphaSection
 %%
 %%
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,6 +26,7 @@
 \usepackage{graphicx}
 \usepackage{setspace}
 \usepackage{tabularray}
+\usepackage{tabularx}
 \usepackage{verbatim}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
@@ -356,35 +358,7 @@
 % = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 % |		HELPER COMMANDS AND DEFINITIONS
 % = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-\newcounter{alphasect}
-\def\alphainsection{0}
-
-\let\oldsection=\section
-\def\section{
-  \ifnum\alphainsection=1
-    \addtocounter{alphasect}{1}
-  \fi
-\oldsection}
-
-\renewcommand\thesection{
-  \ifnum\alphainsection=1
-    \Alph{alphasect}
-  \else
-    \arabic{section}
-  \fi
-}
-
-\newenvironment{alphasection}{
-  \ifnum\alphainsection=1
-    \errhelp={Let other blocks end at the beginning of the next block.}
-    \errmessage{Nested Alpha section not allowed}
-  \fi
-  \setcounter{alphasect}{0}
-  \def\alphainsection{1}
-}{
-  \setcounter{alphasect}{0}
-  \def\alphainsection{0}
-}
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
 
 % handle unkown package options
 \DeclareOption*{
