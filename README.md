@@ -4,7 +4,7 @@ A LaTeX package for creating IHK(Industrie- und Handelskammer) conform project d
 
 created: _19. Mar 2024_
 
-last updated: _24. Mar 2024_
+last updated: _25. Apr 2024_
 
 ## Installation
 
